@@ -1,377 +1,160 @@
-<!DOCTYPE HTML>
-<html lang="en">
 <head>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-157941252-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-157941252-1');
-  </script>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-  <meta http-equiv="Pragma" content="no-cache"/>
-  <meta http-equiv="Expires" content="0"/>
-
-  <title>Isaac Han</title>
-
-  <meta name="author" content="Isaac Han">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link rel="stylesheet" type="text/css" href="stylesheet.css">
-  <link rel="icon" type="image/png" href="pictures/personal_round.png">
-
-  <style>
-    .publication-filter {
-      display: block;
-      margin-left: 0;
-      margin-top: 5px;
-    }
-    .filter-btn {
-      background: none;
-      border: none;
-      color: #1772d0;
-      cursor: pointer;
-      text-decoration: none;
-      font-size: 16px;
-      padding: 0 5px;
-      font-family: inherit;
-    }
-    .filter-btn:hover {
-      text-decoration: none;
-      color: orange;
-    }
-    .filter-btn.active {
-      color: #1772d0;
-      font-weight: bold;
-    }
-    .publication-entry {
-      transition: opacity 0.3s ease, height 0.3s ease;
-    }
-    .publication-entry.hidden {
-      display: none;
-    }
-    /* Style for the Simba GIF to crop the top */
-    .paper-images {
-      width: 100%;
-      height: auto;
-    }
-    .cropped-gif {
-      width: 100%;
-      clip-path: inset(20% 0 20% 0);
-    }
-    .spotlight {
-        color: orange;
-        font-weight: bold;
-      }
-  </style>
-
+	<title>FIRE</title>
+	<meta property="og:title" content="FIRE:">
+	<meta property="og:description" content="FIRE: Frobenius-Isometry Reinitialization for Balancing the Stability-Plasticity Tradeoff">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script type="text/javascript">
+		function toggle(id) {
+			var e = document.getElementById(id);
+			if(e.style.display == 'block')
+				e.style.display = 'none';
+			else
+				e.style.display = 'block';
+		}
+	</script>
 </head>
+<div class="header" id="top">
+	<h1><span class="bold mcolor">FIRE </span><br/>Frobenius-Isometry Reinitialization for <br> Balancing the Stability-Plasticity Tradeoff</h1>
+	<h3><a class="bold default-color">ICLR 2026</span><br/></h3>
+	<table class="authors">
+		<tbody>
+			<tr>
+				<td>
+					<h4>
+						<a href="https://isaac7778.github.io" class="nobreak">Isaac Han</a><sup>1</sup>,&ensp;
+						<a href="https://scholar.google.com/citations?user=fMTWOWMAAAAJ&hl=en" class="nobreak">Sangyeon Park</a><sup>1</sup>,&ensp;
+						<a href="https://scholar.google.com/citations?user=aFgeYz0AAAAJ&hl=en" class="nobreak">Seungwon Oh</a><sup>1</sup>&ensp;
+						<a href="https://i-am-proto.github.io" class="nobreak">Donghu Kim</a><sup>2</sup>&ensp;<br/>
+						<a href="https://joonleesky.github.io/" class="nobreak">Hojoon Lee</a><sup>2</sup>&ast;&ensp;
+						<a href="https://cilab.gist.ac.kr/hp/current-member/" class="nobreak">KyungJoong Kim</a><sup>1</sup>&ast;&ensp;
+						
+						<div class="affiliations">
+							<br/>
+							<sup>1</sup> GIST&ensp;
+							<sup>2</sup> KAIST&ensp;
+						</div>
+						<br/>
+						<span class="authors-affiliation" style="font-size: 0.85em;">&ast;Equally advising</span>
+					</h4>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="links">
+		<a href="https://openreview.net/forum?id=CfZLxT3zIZ" class="btn"><i class="fa">&#xf1c1;</i>&ensp;Openreview</a>
+	</div>
+</div>
+<div class="content">
+	<div class="tldr-hr"></div>
+	<div class="tldr-container">
+		<h2>TL;DR</h2> 
+		<p class="tldr-content">
+			Stop tuning reinitialization strength, just <span class="bold">balance stability and plasticity with <span class="bold mcolor">FIRE</span></span>.
+		</p>
+	</div>
+	<div class="hr"></div>
+	<div class="figure" style="height: 600px; background-image: url(images/overview.png);"></div>
+	<div style="margin: auto; margin-top: -24px;">
+		<p>
+			<span class="bold mcolor">Overview.</span> <span class="bold">
+			</span>FIRE</span> balances stability and plasticity in a principled manner via constarined optimization.
+			<span class="bold"> (a) FIRE well balances stability-plasticity in continual visual learning:</span>
+			Stability and plasticity across diverse architectures and datasets, including CIFAR-10 with ResNet-18, CIFAR-100 with ViT-Tiny, and Tiny ImageNet with VGG-16.
+			<span class="bold">(b) FIRE well balances stability-plasticity in continual pretraining of LLMs:</span>
+			GPT-0.1B was trained on WikiText-103 and OpenWebText. From left to right, results correspond to models initialized from the best checkpoint during pretraining, from 30k pretraining iterations, and from 60k pretraining iterations.
+			<span class="bold">(c) FIRE well balances stability-plasticity in reinforcement learning:</span>
+			continuous control with SAC on three HumanoidBench tasks. The black dashed line indicates the point at which reinitialization is applied.
+		</p>
+	</div>
+	<div class="hr"></div>
+	<div>
+		<h2>Abstract</h2>
+		<p class="abstract">
+			We propose <span class="bold mcolor">FIRE</span>, a principled reinitialization method that explicitly balances the stability-plasticity tradeoff. FIRE quantifies stability through Squared Frobenius Error (SFE), measuring proximity to past weights, and plasticity through Deviation from Isometry (DfI), reflecting weight isotropy. The reinitialization point is obtained by solving a constrained optimization problem, minimizing SFE subject to DfI being zero, which is efficiently approximated by Newton-Schulz iteration. FIRE is evaluated on continual visual learning (CIFAR-10 with ResNet-18), language modeling (OpenWebText with GPT-0.1B), and reinforcement learning (HumanoidBench with SAC and Atari games with DQN). Across all domains, FIRE consistently outperforms both naive training without intervention and standard reinitialization methods, demonstrating effective balancing of the stability-plasticity tradeoff.
+		</p>
+	</div>
+	<div class="hr"></div>
+	<div>
+		<h2>FIRE Algorithm</h2>
+		<div class="figure" style="height: 200px; background-image: url(images/fire_algorithm.png);"></div>
+		<div style="margin: auto;">
+		<p class="architecture">
+			<span class="bold">(a) Illustration of FIRE:</span> Solving a constrained optimization problem, FIRE places weights at the intersection of high-stability and high-plasticity manifolds. The solution to the constrained optimization problem is the nearest semi-orthogonal weight matrix.
+			<span class="bold">(b) Algorithm of FIRE:</span> FIRE approximates this solution via the Newton-Schulz iteration, orthogonalizing the neural network weights after training on the current dataset and before learning on a new one.
+		</p>
+	</div>
+	<div class="hr"></div>
+	<div>
+		<h2>FIRE with Continual Visual Learning</h2>
+		<div class="figure-caption">
+			<p>
+				We evaluate FIRE on <span class="bold">3</span> continual visual learning tasks across 3 pairs of various architectures and datasets: CIFAR-10 with ResNet-18, CIFAR-100 with ViT-Tiny, and Tiny ImageNet with VGG-16.
+			</p>
+		</div>
+		<div class="figure" style="height: 600px; background-image: url(images/vision.png);"></div>
+	</div>
 
-<body>
-  <div class="container">
-    <div class="row" style="margin-top: 10px;">
-      <div class="col-sm-4 name-column" style="min-width: 266px;">
-        <p style="text-align:center">
-          <name>Isaac Han</name>
-        </p>
-      </div>
-      <div class="col-sm-8 name-column text-right" style="min-width: 266px; margin-top: 10px">
-      </div>
-    </div>
-    <div class="row common-rows">
-
-      <div class="col-xs-12 col-sm-8 personal-column">
-        <p>
-            I'm a Ph.D student from <a href="https://ai.gist.ac.kr/aieng/index.do">GIST AI</a>, advised by <a href="https://cilab.gist.ac.kr/hp/current-member/">Kyung-Joong Kim</a>
-        </p>
-        <p>
-            I’m interested in building an intelligent agent that can continuously learn and adapt to changing environments. My current and future research focus on reinforcement learning, continual learning, and streaming learning.
-        </p>
-        <p>
-            Previously, I explored wide range of topics such as 3D pose estimation from wearable sensors, StarCraft AI, VR haptic devices, and off-road autonomous driving.
-        </p>
-        <p>
-            I enjoy collaborating with researchers from various fields. Feel free to contact me if you'd like to collaborate!
-        </p>
-        <p style="text-align:center">
-          <a href="mailto:lssac7778@gm.gist.ac.kr">Email</a> &nbsp/&nbsp
-          <a href="data/isaachan202601cv.pdf">CV</a> &nbsp/&nbsp
-          <a href="https://scholar.google.co.kr/citations?user=ralPRksAAAAJ&hl=en">Google Scholar</a> &nbsp/&nbsp
-          <a href="https://www.linkedin.com/in/isaac-han-170291177/">LinkedIn</a> &nbsp/&nbsp
-          <a href="https://x.com/isaac_han_ai">Twitter</a> &nbsp/&nbsp
-          <a href="https://github.com/isaac7778">Github</a>
-        </p>
-
-      </div>
-      <div class="col-xs-12 col-sm-4 personal-column" style="margin-top: 10px">
-        <img alt="profile photo" src="pictures/profile.jpg" class="personal-photo">
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row section-heading-rows">
-      <h5>Publications</h5>
-    </div>
-    <div class="publication-filter" style="margin-top:-1%">
-      <a href="javascript:void(0)" class="filter-btn active" data-filter="selected">Selected</a> /
-      <a href="javascript:void(0)" class="filter-btn" data-filter="all">All</a>
-    </div>
-
-    <div class="row common-rows publication-entry" style="margin-top: 4%">
-      <div class="col-xs-12 custom-col-sm-3 left-column">
-          <img src="pictures/preprint2026scotti.png" class="paper-images">
-      </div>
-      <div class="col-xs-12 col-sm-9 right-column" style="margin-top: -1%"">
-        <br>
-        <papertitle>
-        Shared Representation for 3D Pose Estimation, Action Classification, and Progress Prediction from Tactile Signals
-        </papertitle>
-        <br>
-        <strong>Isaac Han</strong>,
-        Seoyoung Lee,
-        Sangyeon Park,
-        Ecehan Akan,
-        <a href="https://yyueluo.com/">Yiyue Luo</a>,
-        <a href="https://www.josephdelpreto.com/">Joseph DelPreto</a>,
-        <a href="https://cilab.gist.ac.kr/hp/">Kyungjoon Kim</a>.
-        <br>
-        <em>Preprint</em>.
-        <br>
-        <a href="https://github.com/isaac7778/isaac7778.github.io/tree/main/data/preprint2026scotti.pdf">paper</a>
-        <br><br>
-      </div>
-    </div>
-
-    <div class="row common-rows selected-publication" style="margin-top: 0%">
-        <div class="col-xs-12 custom-col-sm-3 left-column">
-            <img src="pictures/iclr2026fire.png" class="paper-images">
-        </div>
-      <div class="col-xs-12 col-sm-9 right-column" alt="preprint2025rda" style="margin-top: -1%"">
-        <!--
-        <span style="background-color:#e2c7e5">Reinforcement Learning</span>
-        <span style="background-color:#fcdf8e">Robotics</span>
-        -->
-        <br>
-        <papertitle>
-        FIRE: Frobenius-Isometry Reinitialization for Balancing the Stability–Plasticity Tradeoff
-        </papertitle>
-        <br>
-        <strong>Isaac Han</strong>,
-        Sangyeon Park,
-        Seungwon Oh,
-        <a href="https://i-am-proto.github.io/">Donghu Kim</a>, <br>
-        <a href="https://joonleesky.github.io/">Hojoon Lee</a>,
-        <a href="https://cilab.gist.ac.kr/hp/current-member/">Kyung-Joong Kim</a>
-        <br>
-        <em>ICLR'26</em>.
-        <br>
-        <a href="https://openreview.net/forum?id=CfZLxT3zIZ">paper</a>
-        <br><br>
-        <!--
-        <p style="margin-top: -1%;"> 
-            Introduce champion-level vision-based RL agent in GranTurismo 7!
-        </p>
-        -->
-      </div>
-    </div>
-
-    <div class="row common-rows selected-publication" style="margin-top: 0%">
-        <div class="col-xs-12 custom-col-sm-3 left-column">
-            <img src="pictures/icml2025aid.png" class="paper-images">
-        </div>
-      <div class="col-xs-12 col-sm-9 right-column" alt="preprint2025rda" style="margin-top: -1%"">
-        <!--
-        <span style="background-color:#e2c7e5">Reinforcement Learning</span>
-        <span style="background-color:#fcdf8e">Robotics</span>
-        -->
-        <br>
-        <papertitle>
-        Activation by Interval-wise Dropout: A Simple Way to Prevent Neural Networks from Plasticity Loss
-        </papertitle>
-        <br>
-        Sangyeon Park,
-        <strong>Isaac Han</strong>,
-        Seungwon Oh,
-        <a href="https://cilab.gist.ac.kr/hp/current-member/">KyungJoong Kim</a>
-        <br>
-        <em>ICML'25</em>.
-        <br>
-        <a href="https://arxiv.org/abs/2502.01342">paper</a>
-        <br><br>
-        <!--
-        <p style="margin-top: -1%;">
-            Introduce champion-level vision-based RL agent in GranTurismo 7!
-        </p>
-        -->
-      </div>
-    </div>
-
-    <div class="row common-rows publication-entry" style="margin-top: 4%">
-      <div class="col-xs-12 custom-col-sm-3 left-column">
-          <img src="pictures/mtap2024starcraft.png" class="paper-images">
-      </div>
-      <div class="col-xs-12 col-sm-9 right-column" style="margin-top: -1%"">
-        <br>
-        <papertitle>
-        Deep ensemble learning of tactics to control the main force in a real-time strategy game
-        </papertitle>
-        <br>
-        <strong>Isaac Han</strong>,
-        <a href="https://cilab.gist.ac.kr/hp/">Kyungjoong Kim</a>.
-        <br>
-        <em>Multimedia Tools and Applications (2024)</em>.
-        <br>
-        <a href="https://github.com/isaac7778/isaac7778.github.io/tree/main/data/preprint2024starcraft.pdf">paper</a>
-        <br><br>
-      </div>
-    </div>
-
-    <div class="row common-rows publication-entry" style="margin-top: 4%">
-      <div class="col-xs-12 custom-col-sm-3 left-column">
-          <img src="pictures/ieeecim2023mctd.png" class="paper-images">
-      </div>
-      <div class="col-xs-12 col-sm-9 right-column" style="margin-top: -1%"">
-        <br>
-        <papertitle>
-          Monte Carlo and Temporal Difference Methods in Reinforcement Learning (Immersive Article)
-        </papertitle>
-        <br>
-        <strong>Isaac Han</strong>,
-        <a>Seungwon Oh</a>,
-        <a>Hoyoun Jung</a>,
-        <a>Insik Chung</a>,
-        <a href="https://cilab.gist.ac.kr/hp/">Kyungjoong Kim</a>.
-        <br>
-        <em>IEEE Computational Intelligence Magazine (2023)</em>.
-        <br>
-        <a href="https://ieeexplore.ieee.org/abstract/document/10287161">paper</a>
-        <br><br>
-      </div>
-    </div>
-
-    <div class="row common-rows publication-entry" style="margin-top: 4%">
-      <div class="col-xs-12 custom-col-sm-3 left-column">
-          <img src="pictures/vr2023seamless.png" class="paper-images">
-      </div>
-      <div class="col-xs-12 col-sm-9 right-column" style="margin-top: -1%"">
-        <br>
-        <papertitle>
-          Seamless-walk: natural and comfortable virtual reality locomotion method with a high-resolution tactile sensor
-        </papertitle>
-        <br>
-        <a>Yunho Choi</a>,
-        <a>Donh-Hyeok Park</a>,
-        <a>Sungha Lee</a>,
-        <strong>Isaac Han</strong>,
-        <a>Ecehan Akan</a>,
-        <a>Hyeon-Chang Jeon</a>,
-        <a href="https://yyueluo.com/">Yiyue Luo</a>,
-        <a href="https://sites.google.com/view/gist-hcis-lab">SeungJun Kim</a>,
-        <a href="https://cdfg.mit.edu/wojciech">Wojciech Matusik</a>,
-        <a href="https://www.csail.mit.edu/person/daniela-rus">Daniela Rus</a>,
-        <a href="https://cilab.gist.ac.kr/hp/">Kyungjoong Kim</a>.
-        <br>
-        <em>Virtual Reality (2023)</em>.
-        <br>
-        <a href="https://link.springer.com/article/10.1007/s10055-023-00750-x">paper</a> / <a href="https://techxplore.com/news/2023-04-natural-comfortable-seamless-walk-virtual-reality.html">news</a>
-        <br><br>
-      </div>
-    </div>
-
-    <div class="row common-rows publication-entry" style="margin-top: 4%">
-      <div class="col-xs-12 custom-col-sm-3 left-column">
-          <img src="pictures/ieeeacess2021offroad.png" class="paper-images">
-      </div>
-      <div class="col-xs-12 col-sm-9 right-column" style="margin-top: -1%"">
-        <br>
-        <papertitle>
-          A New Open-Source Off-road Environment for Benchmark Generalization of Autonomous Driving
-        </papertitle>
-        <br>
-        <strong>Isaac Han</strong>,
-        <a>Donh-Hyeok Park</a>,
-        <a href="https://cilab.gist.ac.kr/hp/">Kyungjoong Kim</a>.
-        <br>
-        <em>IEEE Access (2021)</em>.
-        <br>
-        <a href="https://ieeexplore.ieee.org/document/9552860">paper</a> / <a href="https://www.youtube.com/watch?v=SERSv0TFUwQ">video</a> / <a href="https://github.com/isaac7778/Off-road-Benchmark">code</a>
-        <br><br>
-      </div>
-    </div>
-
-  <div class="container">
-    <div class="row section-heading-rows" style="margin-left:-2%; margin-top:2%">
-      <h5 style="z-index: 2;">Academic Services</h5>
-    </div>
-
-
-    <div class="row common-rows" style="margin-top:-3%; margin-left:-3.5%">
-        <div class="col-xs-12 col-sm-3 left-column">
-          <ul style="margin-left:-1.5em; margin-top:0.5em;">
-          <li style="white-space: nowrap;">ACM CHI Reviewer (2026)</li>
-          <li style="white-space: nowrap;">ICRA Reviewer (2026)</li>
-          <li style="white-space: nowrap;">IEEE CoG Reviewer (2025)</li>
-          </ul>
-        </div>
-      </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <p style="text-align:right;font-size:small;">
-          Template based on <a href="https://joonleesky.github.io/">Hojoon Lee's website</a>.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const publications = document.querySelectorAll('.publication-entry');
-        
-        // Function to apply filtering
-        function applyFilter(filterValue) {
-          // Remove active class from all buttons
-          filterBtns.forEach(btn => btn.classList.remove('active'));
-          
-          // Add active class to the button with matching data-filter
-          const activeBtn = document.querySelector(`.filter-btn[data-filter="${filterValue}"]`);
-          if (activeBtn) {
-            activeBtn.classList.add('active');
-          }
-          
-          // Show/hide publications based on filter
-          if (filterValue === 'selected') {
-            publications.forEach(pub => {
-              if (pub.classList.contains('selected-publication')) {
-                pub.classList.remove('hidden');
-              } else {
-                pub.classList.add('hidden');
-              }
-            });
-          } else if (filterValue === 'all') {
-            publications.forEach(pub => pub.classList.remove('hidden'));
-          }
-        }
-        
-        // Add click event listeners to filter buttons
-        filterBtns.forEach(btn => {
-          btn.addEventListener('click', function() {
-            const filter = this.getAttribute('data-filter');
-            applyFilter(filter);
-          });
-        });
-        
-        // Apply the "selected" filter by default on page load
-        applyFilter('selected');
-      });
-  </script>
-</body>
+	<div class="hr"></div>
+	<div>
+		<h2>FIRE with Continual Pre-training of LLMs </h2>
+		<div class="figure-caption">
+			<p>
+				We pretrained GPT-0.1B on WikiText-103 and then continually trained on a new dataset consisting of a mixture of OpenWebText and WikiText-103. From left to right, results correspond to models initialized from the best checkpoint during pretraining, from 30k pretraining iterations, and from 60k pretraining iterations.
+			</p>
+		</div>
+		<div class="figure" style="height: 200px; background-image: url(images/language.png);"></div>
+	</div>
+	<div class="hr"></div>
+	<div>
+		<h2>FIRE with Reinforcement Learning</h2>
+		<div class="figure-caption">
+			<p>
+				(up) Discrete control with DQN on three <a href="https://arxiv.org/pdf/1207.4708">Atari</a> environments that suffer from severe plasticity loss. (down) Continuous control with SAC on three <a href="https://humanoid-bench.github.io/">HumanoidBench</a> tasks. The black dashed line indicates the point at which reinitialization is applied.
+			</p>
+		</div>
+		<div class="figure" style="height: 400px; background-image: url(images/rl.png);"></div>
+	</div>
+	<div class="hr"></div>
+	<div style="margin: auto; margin-bottom: 64px; text-align: center;">
+		<h2>Paper</h2>
+		<span class="vbold"><span class="vbold mcolor">FIRE</span>: Frobenius-Isometry Reinitialization for Balancing the Stability-Plasticity Tradeoff</span><br/>
+		<span class="italic">Isaac Han, Sangyeon Park, Seungwon Oh, Donghu Kim, <br/>
+							Hojoon Lee, KyungJoong Kim</span><br/><br/>
+		<a href="https://openreview.net/forum?id=CfZLxT3zIZ">Openreview</a><br/><br/>
+		<div class="page" style="background-image: url(thumbnails/0.jpg);"></div>
+		<div class="page" style="background-image: url(thumbnails/1.jpg);"></div>
+		<div class="page" style="background-image: url(thumbnails/2.jpg);"></div>
+		<div class="page" style="background-image: url(thumbnails/3.jpg);"></div>
+		<div class="page" style="background-image: url(thumbnails/4.jpg);"></div>
+		<div class="page" style="background-image: url(thumbnails/5.jpg);"></div>
+		<div class="page" style="background-image: url(thumbnails/6.jpg);"></div>
+		<div class="page" style="background-image: url(thumbnails/7.jpg);"></div>
+		<div class="page" style="background-image: url(thumbnails/8.jpg);"></div>
+		<div class="page" style="background-image: url(thumbnails/9.jpg);"></div>
+	</div>
+	<div class="hr"></div>
+	<div style="padding-bottom: 64px; text-align: center;">
+		<h2>Citation</h2>
+		<p>
+			If you find our work useful, please consider citing the paper as follows:
+		</p>
+		<div id="bibtex-text" class="bibtexsection" onClick="window.getSelection().selectAllChildren(document.getElementById('bibtex-text'));">
+@article{han2026fire,
+	title={FIRE: Frobenius-Isometry Reinitialization
+		for Balancing the Stability-Plasticity Tradeoff},
+	author={Isaac Han and Sangyeon Park and Seungwon Oh and Donghu Kim
+		and Hojoon Lee and KyungJoong Kim},
+	journal={International Conference on Learning Representations (ICLR)},
+	year={2026}
+}
+		</div>
+	</div>
+</div>
+<footer>
+<a href="index.html#top"><i class="fa fa-arrow-up"></i><br/>Return to top</a>
+<div style="padding-top: 48px;">
+	<span>Website based on <a href="https://sonyresearch.github.io/simba/">SimBa</a>.</span>
+</div>
+</footer>
