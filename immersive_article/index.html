@@ -1,0 +1,1359 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags for IEEE Xplore immersive article -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="An interactive article on introducing Monte Carlo and Temporal Difference approach on a grid world. Learn about the Monte Carlo and Temporal Difference approaches and their differences.">
+  <meta charset="utf8">
+  <title>Monte Carlo and Temporal Difference Methods in Reinforcement Learning
+  </title>
+
+  <!-- Stylesheet for IEEE Xplore immersive article -->
+  <link rel="stylesheet" href="fonts/stylesheet.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- MathJax javascript library and implementation file/s -->
+<!--  <script type="text/javascript" async-->
+<!--    src="https://xploreqa.ieee.org/xploreAssets/MathJax-274/MathJax.js?config=default">-->
+<!--  </script>-->
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+
+  <!-- Example chessboard immersive app -->
+  <link rel="stylesheet" href="rlboard/rlboard.css">
+
+  <!-- plotly -->
+  <script src="rlboard/plotly.min.js" charset="utf-8"></script>
+
+  <!-- mathjs -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.js"></script>
+
+  <!-- SweetAlert2-->
+  <link rel="stylesheet" href="rlboard/sweetalert2.min.css">
+  <script src="rlboard/sweetalert2.all.min.js"></script>
+</head>
+
+<body>
+  <!-- Article with large top spacing -->
+  <article class="mt-lg">
+    <header>
+      <!-- Page container -->
+      <div class="container">
+        <!-- Page title -->
+        <h1>
+          Monte Carlo and Temporal Difference Methods in Reinforcement Learning
+        </h1>
+        <!-- Subheading -->
+        <p class="subhead">
+          An interactive article on introducing Monte Carlo and Temporal Difference approach on a grid world.
+          Learn about the Monte Carlo and Temporal Difference approaches and their differences.
+        </p>
+        <!-- Header info general wrapper -->
+        <div class="header-info">
+          <!-- Header left info box -->
+          <div class="header-left box">
+            <!-- Header authors section -->
+            <div class="header-authors">
+              <h2>Authors</h2>
+              <ul>
+                <li>Isaac Han | Gwangju Institute of Science and Technology, South Korea</li>
+                <li>Seungwon Oh | Gwangju Institute of Science and Technology, South Korea</li>
+                <li>Hoyoun Jung | Gwangju Institute of Science and Technology, South Korea</li>
+                <li>Insik Chung | Gwangju Institute of Science and Technology, South Korea</li>
+                <li>Kyung-Joong Kim | Gwangju Institute of Science and Technology, South Korea</li>
+              </ul>
+            </div>
+            <!-- Published info section -->
+            <div class="header-published">
+              <h2>IEEE CIM AI-eXplained</h2>
+            </div>
+          </div>
+          <!-- Header legend section -->
+          <div class="header-legend">
+            <svg class="click-icon" data-name="Click"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 83.62 122.88">
+              <title>Click</title>
+              <path
+                d="M40.59,14.63a3.36,3.36,0,0,1-1,2.39l0,0a3.39,3.39,0,0,1-4.77,0,3.42,3.42,0,0,1-1-2.4V3.39A3.4,3.4,0,0,1,37.2,0a3.34,3.34,0,0,1,2.39,1,3.39,3.39,0,0,1,1,2.4V14.63Zm25,76.65a1.89,1.89,0,0,1,3.77,0V99.9a1.89,1.89,0,1,1-3.77,0V91.28ZM54.46,87.47a1.89,1.89,0,0,1,3.77,0V99.9a1.89,1.89,0,1,1-3.77,0V87.47Zm-28-7.63a1.92,1.92,0,0,1-.35-.23q-5.24-4.24-10.44-8.53a8.36,8.36,0,0,0-3.57-1.79,3.54,3.54,0,0,0-2,.09A2,2,0,0,0,9,70.49a6.9,6.9,0,0,0-.4,3.24,12.47,12.47,0,0,0,1.11,4,26.49,26.49,0,0,0,2.92,4.94l17.68,26.74a2.37,2.37,0,0,1,.36,1,15.28,15.28,0,0,0,1.87,6.4,2.89,2.89,0,0,0,2.57,1.46c9,0,18.62-.34,27.53,0a8.33,8.33,0,0,0,4.69-1.51,15,15,0,0,0,4.29-5l.34-.57c3.4-5.87,6.71-11.57,7-18.33L78.85,85l0-.33,0-1.84c.06-5.74.16-14.54-4.62-15.4H71.14c.09,2.46,0,5-.18,7.3-.08,1.36-.15,2.63-.15,3.79a2.31,2.31,0,1,1-4.62,0c0-1.1.08-2.52.17-4,.32-5.73.75-13.38-3.24-14.14h-3a2.2,2.2,0,0,1-.58-.07,69.07,69.07,0,0,1-.13,8.29c-.07,1.36-.15,2.63-.15,3.79a2.31,2.31,0,1,1-4.61,0c0-1.1.08-2.52.16-4,.33-5.73.76-13.38-3.24-14.14h-3a2,2,0,0,1-.6-.08V66a2.31,2.31,0,1,1-4.61,0V42c0-4-1.64-6.55-3.73-7.61a5.32,5.32,0,0,0-4.71-.06l-.1.06c-2.07,1-3.69,3.59-3.69,7.7v42a2.31,2.31,0,1,1-4.62,0V79.84Zm44.14-17a2.49,2.49,0,0,1,.61-.08h3.19a2.33,2.33,0,0,1,.53.06c8.73,1.4,8.61,12.65,8.52,20,0,3.4.14,6.78.18,10.17-.39,7.91-4,14.1-7.67,20.47l-.32.55A19.49,19.49,0,0,1,70,120.55a12.88,12.88,0,0,1-7.29,2.32H35.17a7.23,7.23,0,0,1-6.44-3.5,19,19,0,0,1-2.56-7.88L8.94,85.42A31,31,0,0,1,5.5,79.58,16.88,16.88,0,0,1,4,74a11.42,11.42,0,0,1,.8-5.42,6.54,6.54,0,0,1,3.55-3.49A8.05,8.05,0,0,1,13,64.76a13.19,13.19,0,0,1,5.61,2.77L26.45,74V42.09c0-6.1,2.73-10,6.22-11.82l.15-.06a9.81,9.81,0,0,1,4.33-1,10,10,0,0,1,4.49,1.07C45.16,32.06,47.91,36,47.91,42v7.6a2.41,2.41,0,0,1,.6-.08H51.7a2.33,2.33,0,0,1,.53.06c3.82.61,5.73,3.16,6.63,6.47a2.25,2.25,0,0,1,1.23-.36h3.18a2.26,2.26,0,0,1,.53.06c4.07.65,6,3.49,6.79,7.11ZM14.63,37A3.33,3.33,0,0,1,17,38a3.39,3.39,0,0,1-2.39,5.79H3.39a3.36,3.36,0,0,1-2.39-1A3.4,3.4,0,0,1,3.39,37ZM23,20.55a3.39,3.39,0,0,1-2.4,5.79,3.4,3.4,0,0,1-2.4-1l-7.91-7.94a3.42,3.42,0,0,1-1-2.4,3.39,3.39,0,0,1,5.79-2.4L23,20.55ZM59.2,43.81a3.41,3.41,0,0,1-3.4-3.4A3.41,3.41,0,0,1,59.2,37H70.43a3.35,3.35,0,0,1,2.4,1,3.4,3.4,0,0,1-2.4,5.79ZM55.62,24.74a3.39,3.39,0,0,1-4.8-4.8l7.91-8a3.39,3.39,0,0,1,4.8,4.8l-7.91,8Z" />
+            </svg>
+            <p>Indicates interactive elements</p>
+          </div>
+        </div>
+        <!-- Box of anchored links -->
+        <div class="contents box">
+          <h2>Contents:</h2>
+          <ul>
+            <li>
+              <a href="#introduction">Introduction</a>
+              <span class="separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            </li>
+            <li>
+              <a href="#mdp">Markov Decision Process</a>
+              <span class="separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            </li>
+            <li>
+              <a href="#monte_carlo">Monte Carlo approach</a>
+              <span class="separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            </li>
+            <li>
+              <a href="#temporal_difference">Temporal Difference Learning</a>
+              <span class="separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            </li>
+            <li>
+              <a href="#difference">Difference between MC and TD</a>
+              <span class="separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            </li>
+            <li>
+              <a href="#n_step_TD">N STEP TD</a>
+              <span class="separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            </li>
+            <li>
+              <a href="#conclusion">Conclusion</a>
+              <span class="separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content container with large top spacing -->
+    <div class="container mt-lg">
+      <!-- Anchor ID -->
+      <section id="introduction">
+        <!-- Section title -->
+        <h2>I. Introduction</h2>
+        <p>
+          Learning through interaction with the environment is a natural form of intelligence observed in both humans and animals,
+          who perceive the environment’s state, take actions based on their perception and understanding, and learn from the feedback they receive.
+          Reinforcement learning (RL) [<a href="#ref_0">1</a>] is a computational approach based on this learning mechanism.
+          RL recently showed impressive results in various domains, such as Go [<a href="#ref_1">2</a>], StarCraft [<a href="#ref_2">3</a>],
+          and protein-folding problems [<a href="#ref_3">4</a>].
+        </p>
+
+        <figure class="static">
+          <img src="img/intro/rl_overview.png" alt="Overview of RL" style="margin: auto auto; max-width: 70%; display: block"/>
+          <figcaption><b>Figure 1:</b> Overview of RL </figcaption>
+        </figure>
+
+        <p>
+          RL comprises four main elements:
+        </p>
+
+        <ul id="Units">
+          <li> <b>Policy</b>: This is the probability distribution of actions in a given state that determines the agent’s behavior</li>
+          <li> <b>Reward</b>: This is a signal given to an agent based on its behavior or actions in an environment. The reward serves as a way to reinforce or encourage certain behaviors and discourage others and determines a goal in an RL problem.</li>
+          <li> <b>Value function</b>: This is the total reward an agent will get in the future, starting from a speciﬁc state. It shows how good a state is in the long run.</li>
+          <li> <b>Environment model</b>: This model makes predictions of the environment’s behavior, thereby enabling inference about how the environment will behave.</li>
+        </ul>
+
+        <p>
+          RL is a machine learning technique that allows an agent to learn decision-making by interacting with the environment through trial and error.
+          In each step, the agent’s policy decides on an action based on the current state.
+          The environment then responds with the next state and a reward.
+          The episode terminates if the agent reaches the terminal state.
+          To improve its decision-making, the agent’s policy can be updated based on the value function that estimates the value of a state or an action.
+          However, accurately predicting the future rewards without visiting all the possible states can be challenging.
+        </p>
+
+        <p>
+          RL algorithms are categorized into two types: model-free and model-based types.
+          Model-free algorithms estimate the value function from multiple trials and update the policy based on these values.
+          In contrast, model-based algorithms use planning with the environment model [<a href="#ref_0">1</a>].
+        </p>
+
+        <p>
+          This article focuses on two fundamental model-free algorithms: Monte Carlo (MC) and Temporal Difference (TD).
+          These algorithms can effectively solve various RL problems.
+          Agents are trained and evaluated in a grid-based environment, where the agent starts from the upper left grid and aims to reach the lower right grid.
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Play the SharkGame. Move the shark character in any direction using the arrow button. Begin at the top left corner and make your way
+              to the treasure box located at the bottom right, being careful to avoid the bombs and nets scattered throughout the grid.
+            </div>
+
+            <div id="play_control" class="play_div">
+              <div class="board"></div>
+
+              <div class="btn_arrow" style="display: inline-block">
+                <a class="btn_action_0"><img src="img/buttons/up.png" width="60" alt="up" draggable="false"/></a>
+                <br>
+                <a class="btn_action_2"><img src="img/buttons/left.png" width="60" alt="left" draggable="false"/></a>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <a class="btn_action_3"><img src="img/buttons/right.png" width="60" alt="right" draggable="false"/></a>
+                <br>
+                <a class="btn_action_1"><img src="img/buttons/down.png" width="60" alt="down" draggable="false"/></a>
+                <br><br>
+
+                <img class="score" src="img/buttons/score.png" alt="score"/>
+                <p id="score_text">0.0</p>
+
+                <a class="btn_reset" style="display: block; margin-left: 100px"><img src="img/buttons/reset2.png" alt="reset"/></a>
+              </div>
+            </div>
+
+            <div class="caption"><b>Figure 2:</b><br>
+              Introducing the SharkGame environment.
+            </div>
+
+            <script type="module" src="rlboard/play_control.js"></script>
+          </div>
+        </div>
+
+      </section>
+
+      <section id="mdp">
+        <h2>II. Markov Decision Process</h2>
+
+        <p>
+          RL is a widely used machine learning methodology that focuses on solving sequential decision-making problems,
+          in which the current decisions affect the future outcomes.
+          The Markov decision process (MDP) [<a href="#ref_10">11</a>] is one of the most popular methods of formalizing RL,
+          providing a useful framework for solving sequential decision-making problems.
+        </p>
+
+        <p>
+          The MDP is defined by states, actions, transition probabilities, and reward function.
+          Understanding the MDP is crucial considering that the goal of RL is to ﬁnd an optimal policy that maximizes the total rewards or evaluates the value of a set of actions given the MDP’s rules and constraints.
+          The MDP extends the concept of a Markov process, a stochastic process that only comprises states and transition probabilities.
+        </p>
+
+        <h3>Markov Process</h3>
+        <p>
+          A stochastic process that models a system's evolution over time is called a Markov process.
+          The transition probability of a first-order Markov process is defined by the conditional probabilities that consider only the most recent previous state.
+          This characteristic is governed by the Markov Property.
+          The Markov Property suggests that the future state of a system solely relies on the current state, completely disregarding any influence from the previous states.
+        </p>
+
+        <p>
+          $$P\left[s_{t+1} \mid s_t\right]= P\left[s_{t+1} \mid s_1, s_2, \ldots, s_t\right]$$
+        </p>
+
+        <p>
+          Figure 3 depicts an example [<a href="#ref_4">5</a>] of a Markov process.
+        </p>
+
+        <figure class="static">
+          <img src="img/mdp/transition.png" alt="Markov process for child's sleep pattern" style="margin: auto auto; max-width: 70%; display: block"/>
+          <figcaption><b>Figure 3:</b> Example of a Markov process for modeling a child's sleep pattern.
+            This example is intended to model the sleeping states of a child until deep sleep. </figcaption>
+        </figure>
+
+        <p>
+          A child can be in five possible sleep states: \(s_0\) (lying), \(s_1\) (awake), \(s_2\) (drowsy), \(s_3\) (light sleep), and \(s_4\) (deep sleep).
+          Each state lasts for a unit of time (e.g., 1 min), and then transitions to the next state based on certain probabilities.
+          Assuming that the Markov process always starts with the child \(s_0\) (lying), the child remains in this state for 1 min.
+          Next is the 40% probability of transitioning to \(s_1\) (awake) or the 60% probability of transitioning to \(s_2\) (drowsy).
+          This process continues until the child reaches \(s_4\) (deep sleep), ending the Markov process.
+        </p>
+        <p>
+          A Markov process is composed of the following components:
+        </p>
+        <ul id="mp_components">
+          <li>
+            State space (\(S\)): This represents all possible states that a system can take.
+            In our example, the states are \(s_0\) (lying), \(s_1\) (awake), \(s_2\) (drowsy), \(s_3\) (light sleep), and \(s_4\) (deep sleep)
+            represented as \(\{s_0, s_1, s_2, s_3, s_4\} \in S\).
+          </li>
+
+          <li>
+            Transition probability (\(P_{ss'}\)): This is the probability of transitioning from state \(s\) to another state \(s'\) at step \(t\) represented as \(P_{ss'} = P(S_{t+1} = s' \mid S_{t} = s)\).
+            The transition probability table is provided as follows:
+          </li>
+
+          <p>
+              \[
+              \begin{array}{c c}
+              &
+              \begin{array}{c c c c c} s_0 & s_1 & s_2 & s_3 & s_4 \\
+              \end{array} \\
+              P_{ss'} =
+              \begin{array}{c c c}s_0 \\ s_1 \\ s_2 \\ s_3 \\ s_4 \end{array} &
+              \left[
+              \begin{array}{c c c}
+                  & 0.4 & 0.6 &     &     \\
+              0.1 & 0.9 &     &     &     \\
+                  &     &     & 0.7 & 0.3 \\
+                  &     &     &     & 1.0 \\
+                  &     &     &     & 1.0 \\
+              \end{array}
+              \right]
+              \end{array}
+              \]
+        </p>
+
+          <p class="inline-math">
+            Where the transition probability from $$s_4$$ to $$s_4$$ is denoted by 1 in the table.
+            However, note that no state transition can be made after reaching $$s_4$$ because it is a terminal state.
+            Thus, the self-edge on $$s_4$$ is not presented in Figure 3.
+          </p>
+
+
+        <br>
+        <br>
+        <br>
+
+      </ul>
+      <div class="framed">
+        <div class="inside">
+          <div class="eyebrow">
+            Click the transition button to see state transitions in the Markov process for a child's sleep pattern until deep sleep, along with their corresponding probabilities.
+          </div>
+
+          <div id="play_mdp_transition" class="play_div">
+            <canvas width="800px" height="400px"></canvas>
+            <a class="btn_transition" style="display: block; margin: auto"><img src="img/buttons/transition.png" width="120" alt="transition" draggable="false"/></a>
+            <a class="btn_reset" style="display: block; margin: auto"><img src="img/buttons/reset2.png" alt="reset"/></a>
+          </div>
+
+          <div class="caption"><b>Figure 4:</b><br>
+            An example of a Markov process for modeling a child's sleep pattern.
+            This example is intended to model the sleeping states of a child until deep sleep.
+          </div>
+
+          <script type="module" src="rlboard/play_mdp_transition.js"></script>
+        </div>
+      </div>
+
+      <h3> Markov Decision Process </h3>
+
+      <p>
+        The MDP extends a Markov process by incorporating decision-making capabilities, setting it apart from the latter.
+        While a Markov process models a system in which the future state is determined only by the current state, the MDP introduces the concept of actions
+        taken by an agent, which can influence the next system state. This enables the MDP to model real-world scenarios better.
+      </p>
+
+      <p>
+        In the MDP, the agent chooses an action based on its current state and the reward associated with the action at each time step.
+        The subsequent state is then established depending on the transition probability.
+        The agent aims to learn a policy that maps states to actions maximizing the expected cumulative reward over time.
+        The agent can efficiently navigate the system and achieve its objectives by making decisions based on this policy.
+        Figure 5 provides an example of the MDP.
+      </p>
+
+      <figure class="static">
+        <img src="img/mdp/action.png" alt="Markov Decision Process for Improving a child’s sleep quality" style="margin: auto auto; max-width: 70%; display: block"/>
+        <figcaption><b>Figure 5:</b> Example of an MDP for improving a child's sleep quality.</figcaption>
+      </figure>
+
+      <p>
+        The MDP comprises the following components:
+      </p>
+
+      <ul id="mdp_components">
+        <li> State Space (\(S\)): This represents all the possible states that a system can take.
+            In our example, the states are  \(s_0\) (lying), \(s_1\) (awake), \(s_2\) (drowsy), \(s_3\) (light sleep), and \(s_4\) (deep sleep),
+            which can be represented as \(\{s_0, s_1, s_2, s_3, s_4\} \in S\). </li>
+        <li> Action Space (\(A\)): This denotes all the possible actions that can be taken given a state \(s\), including singing a lullaby and playing with the child, represented as  \(\{a_0, a_1\} \in A\). </li>
+        <li> Transition Probability (\(P_{ss'}^a\)): This is the probability of transitioning from state \(s\) to another state \(s'\) after taking action \(a\) at step \(t\). This is represented by \(P_{ss'}^a = P(S_{t+1} = s' \mid S_{t} = s, A_{t}=a)\).</li>
+        <li> Reward function (\(R\)): The reward function in this MDP can evaluate the desirability of different actions by providing a scalar value, called Reward (\(R_t)\), at a given step \(t\).</li>
+        <li> Discount Factor (\(\gamma\)): This is a value between 0 and 1 that determines the importance of immediate rewards versus long-term ones.</li>
+      </ul>
+
+      <div class="framed">
+        <div class="inside">
+          <div class="eyebrow">
+            Click the action buttons to see state transitions in the MDP for improving a child's sleep quality based on different actions.
+          </div>
+
+          <div id="play_mdp_action" class="play_div">
+            <canvas width="800px" height="400px"></canvas>
+            <br>
+
+              <a class="btn_action_0" style="display: inline-block; margin: auto"><img src="img/buttons/action0.png" width=80 alt="action0" draggable="false"/></a>
+              <a class="btn_action_1" style="display: inline-block; margin: auto"><img src="img/buttons/action1.png" width=80 alt="action1" draggable="false"/></a>
+              <a class="btn_reset" style="display: block; margin: auto"><img src="img/buttons/reset2.png" alt="reset"/></a>
+            </div>
+
+          <div class="caption"><b>Figure 6:</b><br>
+            Example of an MDP for improving a child's sleep quality.
+          </div>
+
+          <script type="module" src="rlboard/play_mdp_action.js"></script>
+        </div>
+      </div>
+
+      <p>
+        The MDP differs from Markov processes in various aspects, including a goal through a reward.
+        In the context of helping a child sleep, a reward function can be set to encourage good sleeping patterns.
+        Alternatively, if the objective is to play with the child, the MDP may reward the state of being awake.
+        Being given the MDP means the need to determine the optimal action to take in each state to maximize the total rewards.
+      </p>
+
+      <p>
+        For instance, \(a_1\) (playing with child) in \(s_0\) (lying) immediately transitions to state \(s_1\) (awake) and receives positive rewards because the child wants to play.
+        However, in the long-term, a continuous \(a_0\) (singing a lullaby) action to put the child to sleep will yield the highest total sum of rewards.
+        Interestingly, taking the \(a_0\) (playing with child) action while the child is in \(s_2\) (drowsy) may lead to a transition to the awake or lying state depending on the given probability.
+        This transition probability helps model problems in a realistic manner.
+      </p>
+
+      <p class="inline-math">
+        Maximizing the sum of the rewards $$R_t$$ by time $$t$$ in the MDP requires evaluating the value of each state and determining the action to take in each state $$s$$.
+        The state value is determined by the expected sum of the discounted future rewards that can be obtained by taking a particular action in that state.
+        The discounting factor $$\gamma$$ is used to ensure that immediate rewards are more highly valued than delayed ones. This expected sum of future rewards is called the return $$G_t$$.
+      </p>
+
+      <p>
+        However, the expected return value must be used because the return value changes every time due to probabilistic factors, such as transitions.
+        The function that outputs the expected return value for each state is called the value function (\(V_\pi\)).
+        The value function is a critical concept in RL because it enables an agent to evaluate the value of different states and determine the optimal policy to follow when maximizing rewards.
+        \[V(s) = \mathbb{E}\left[G_t \mid S_t=s\right]=\mathbb{E}\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \mid S_t=s\right], \text { for all } s \in \mathcal{S}\]
+      </p>
+
+      <p>
+        The transition probability and the reward function are unknown in a model-free environment; therefore, they must be estimated from experience.
+        The two primary methods for the value function estimation in a model-free environment are the MC and TD methods.
+      </p>
+
+      <h3> SharkGame Environment </h3>
+
+      <p>
+        Viewing SharkGame as an MDP, the states represent the shark character’s position, and the actions involved are moving up, down, left, and right.
+        The probability of transitioning to a new state is deterministic. In other words, the action will always result in a speciﬁc next state.
+        If the agent is at the top-left corner and chooses to move right, it will always transition to the state on the right without any chance of moving to the state above, below, or on the left side.
+        The reward function provides a negative feedback for each step and obstacle encountered (e.g., bombs and nets).
+        This approach encourages the agent to find the shortest path to the goal while avoiding the obstacles.
+      </p>
+
+      <figure class="static">
+        <img src="img/mdp/shark_mdp.png" alt="Interpretation of SharkGame as a Markov Decision Process." style="margin: auto auto; max-width: 65%; display: block"/>
+        <figcaption><b>Figure 7:</b> Interpretation of SharkGame as an MDP.</figcaption>
+      </figure>
+
+      <p>
+        The value function of an environment with a small and discrete state space (e.g., SharkGame) can be represented by the table method.
+        The table method is a technique for storing and updating the values for each state or state–action pair in a tabular form.
+        The learned policy must select actions leading to states with the highest value among the options available from the table.
+        In all subsequent examples, the following random agent is employed to compute the true value and approximate it.
+      </p>
+      <!-- random agent -->
+      <div class="framed">
+        <div class="inside">
+          <div class="eyebrow">
+            Click the test button to see how the random agent plays the game. The agent randomly selects to move up, down, left, or right with a 25% chance for each direction.
+            This random agent will be used to evaluate the value of each square on the game board.
+          </div>
+          <div id="play_random" class="play_div">
+            <div class="board"></div>
+            <br>
+
+            <a class="btn_test" style="display: inline-block; margin: auto"><img src="img/buttons/test.png" width="60" alt="reset"/></a>
+            <a class="btn_stop" style="display: none; margin: auto"><img src="img/buttons/stop.png" alt="stop"/></a>
+          </div>
+
+          <div class="caption"><b>Figure 8:</b><br>
+            Introducing the random agent on the SharkGame.
+          </div>
+
+          <script type="module" src="rlboard/play_random.js"></script>
+        </div>
+      </div>
+
+      <p>
+        Assuming complete knowledge of the MDP, the true value approximated using both the MC and TD methods can theoretically be calculated.
+        The value of each state is calculated as follows:
+
+        $$
+        \begin{aligned}
+        
+        V(s)& =\mathbb{E}\left[R_{t+1}+\gamma R_{t+2}+\gamma^2 R_{t+3}+\cdots\right] \\[5pt]
+        & =\mathbb{E}\left[R_{t+1}+\gamma\left(R_{t+2}+\gamma R_{t+3}+\cdots\right)\right] \\[5pt]
+        & =\mathbb{E}\left[R_{t+1}+\gamma V\left(s_{t+1}\right)\right] \\[1pt]
+        & =\sum_{a \in A} \pi(a \mid s)\left(R_t+\gamma \sum_{s^{\prime} \in S} P_{s s^{\prime}}^a V\left(s^{\prime}\right)\right)
+
+        \end{aligned}
+        $$
+        The value for each state in the table is calculated by repeatedly iterating this equation.
+      </p>
+
+      <p>
+        In the SharkGame environment, where the agent receives negative rewards at each step, the gains achieved by reaching the destination must be prioritized.
+        Doing this requires setting a high discount factor (close to 1) that will cause the agent to emphasize the significance of long-term rewards.
+        For example, in a 6 x 6 grid, in which reaching the destination requires many steps, a 0.999 or higher discount factor is necessary to guide the agent toward the destination.
+        By contrast, in a 5 x 5 grid, a 0.995 or higher discount factor is sufficient.
+        The agent retains its initial location if the gains obtained from reaching the destination fail to spread back to the initial position.
+        The random policy does not avoid traps, thereby developing an entrapment risk. This risk is factored into the above formula.
+        It affects the true values and spreads the traps’ negative rewards across nearby spaces.
+        Consequently, agents might accidentally encounter less dangerous traps while avoiding more harmful ones.
+      </p>
+
+      <div class="framed">
+        <div class="inside">
+          <div class="eyebrow">
+            Drag the slider to select the grid size and discount factor(γ) and click 'Test' to observe the agent's behavior based on true values from the random agent.
+          </div>
+
+          <div id="play_various_gamma" class="play_div">
+            <div class="gamma_board" style="margin: auto auto 4px; width: 604px; height: 300px; position: relative;">
+              <div class="gamma_board_left" style="background-repeat: no-repeat; height:100%; float:left"></div>
+              <div class="gamma_board_right" style="background-repeat: no-repeat; height:100%; float:right"></div>
+              <div class="slider_grid_ticks" style="background-repeat: no-repeat;"></div>
+              <div class="slider_gamma_ticks" style="background-repeat: no-repeat;"></div>
+              <input class="slider slider_grid" type="range" min="0" max="2" step="1" value="2">
+              <input class="slider slider_gamma" type="range" min="0" max="10" step="1" value="10">
+            </div>
+            <a class="btn_test" style="display: inline-block; margin: auto"><img src="img/buttons/test.png" alt="test"/></a>
+            <a class="btn_stop" style="display: none; margin: auto"><img src="img/buttons/stop.png" alt="stop"/></a>
+          </div>
+
+          <div class="caption"><b>Figure 9:</b><br>
+            True values of the states depending on the grid size and discount factor. The highlighted path represents the optimal route.
+            The left figure shows the agent and the environment and the right figure shows the true value table.
+          </div>
+
+          <script type="module" src="rlboard/play_various_gamma.js"></script>
+        </div>
+      </div>
+      <br>
+      </section>
+
+      <section id="monte_carlo">
+        <h2>III. Monte Carlo approach</h2>
+
+        <p>
+          The MC method estimates the values by simply averaging the sample returns.
+          This technique relies on simulating the multiple episodes of an agent’s interaction with the environment.
+          In each episode, the agent takes actions and receives rewards. The sequence of states, actions, and rewards is also recorded.
+          The final outcome of each episode is used to update each state value.
+          The MC approach estimates a state value as the average of the returns received in all episodes, in which that state has been visited.
+          The return is the sum of the rewards received after visiting that state until the end of the episode.
+          The estimated state value becomes more accurate as the number of episodes increases.
+        </p>
+
+        <p class="inline-math">
+          The sample return $$G_t$$ is computed at each step after each episode.
+        </p>
+
+        <p>
+          $$G_t = R_{t+1} + \gamma R_{t+2} + ... + \gamma^{T-1} R_{T}$$
+        </p>
+
+        <p class="inline-math">
+          For each visited state in the episode, the increment counter $$N(s_t)$$, which refers to the number of visits to state $$s_t$$, is increased by 1.
+          The sample return $$G_t$$ is added to the total return $$S(s_t)$$.
+          Finally, dividing $$S(s_t)$$ by $$N(s_t)$$, the state value $$V(s_t)$$ is obtained as follows:
+        </p>
+
+        <p>
+          \[N(s_t) = N(s_t) + 1\] 
+          \[S(s_t) = S(s_t) + G_t\]
+          \[V(s_t) = S(s_t) / N(s_t)\]
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              <p class="inline-math">
+                Set values of reward sequence, incremental counter, total return, and discount factor in the interactive formula below, and observe how the new value is calculated.
+              </p>
+            </div>
+
+            <div id="mc_update_calculation" class="update_calculation">
+              <p >\[R = \]</p>
+              <input id="mc-R" value="1,2,3,4" type="text" style="margin-right: 30px; width: 135px"/>
+              <p >\[\gamma = \]</p>
+              <span style="position: relative; top: 10px; left: 5px; font-size: 14px">0</span>
+              <input id="mc-gamma" value="90" min="0" max="100" type="range" style="position: relative; left: -10px"/>
+              <span style="position: relative; top: 11px; left: -26px; font-size: 14px">1</span>
+              <span><br></span>
+              <p>$$ N(s_t) = $$</p>
+              <input id="mc-N" value="10" type="number" min="0"/>
+              <span><br></span>
+              <p>$$ S(s_t) = $$</p>
+              <input id="mc-S" value="20" type="number" min="0"/>
+
+              <span><br></span>
+              <p id="mc-G-calc" style="position: relative; left: -5px"></p>
+              <span><br></span>
+              <p id="mc-V-calc" style="position: relative; top: -20px; left: -5px"></p>
+            </div>
+
+            <div class="caption"><b>Figure 10:</b><br>
+              Computation of new values in MC update process.
+            </div>
+
+            <script type="module" src="rlboard/calculate_mc_update.js"></script>
+          </div>
+        </div>
+
+        <p>
+          However, the incremental formulas of the MC update rule can be easily derived.
+          These formulas provide an efficient method of computing the state value without maintenance and process all returns each time a state is visited.
+          The idea here is to keep a running average, update it each time a new return is available instead of summing all the returns, and divide it by the total number of visits each time.
+        </p>
+
+        <p class="inline-math">
+          The estimate is updated as follows by considering the previous estimate $$V(s_t)$$, the new sample return $$G_{N(s_t)}$$, and the number of visits to a state $$N(s_t)$$ before the current episode:
+        </p>
+
+        <p>
+          $$
+          \begin{aligned}
+
+          V_{new}(s_t) &= S(s_t) / N(s_t) \\
+          &= \frac{1}{N(s_t)} \sum_{i=0}^{N(s_t)} G_{i} \\
+          &= \frac{1}{N(s_t)} (G_{N(s_t)} + \sum_{i=0}^{N(s_t)-1} G_{i}) \\
+          &= \frac{1}{N(s_t)} (G_{N(s_t)} + (N(s_t) - 1)  \frac{1}{(N(s_t) - 1)}  \sum_{i=0}^{N(s_t)-1} G_{i}) \\
+          &= \frac{1}{N(s_t)} (G_{N(s_t)} + (N(s_t) - 1)  V(s_t)) \\
+          &= \frac{1}{N(s_t)} (G_{N(s_t)} + N(s_t)V(s_t) - V(s_t)) \\
+          &= V(s_t) + \frac{1}{N(s_t)}(G_{N(s_t)} - V(s_t)) \\
+
+          \end{aligned}
+          $$
+        </p>
+
+        <p class="inline-math">
+          The term $$\frac{1}{N(s_t)}(G_{N(s_t)} - V(s_t))$$ represents the difference between the new return $$G_{N(s_t)}$$
+          and the current estimated value $$V(s_t)$$ scaled by the inverse of the number of visits.
+          This difference, which is also known as error, quantifies how far the new return deviates from our current estimate.
+          The estimate is then adjusted in the error’s direction. Consequently, an excessively high current estimate will be decreased, while an excessively low one will be increased.
+          The more frequent a state is visited, the less the estimate is influenced by new returns.
+        </p>
+
+        <p class="inline-math">
+          A practical and useful modification that can be made to the MC update formula is to replace the visit count inverse with a step-size parameter $$\alpha$$.
+          This change offers additional control over the learning process.
+        </p>
+
+        <p>
+          \[V_{new}(s_t) = V(s_t) + \alpha (G_{t} - V(s_t))\]
+        </p>
+
+        <p class="inline-math">
+          The step-size parameter $$\alpha$$ is crucial because it determines the extent to which our estimates are updated based on new information.
+          At an $$\alpha$$ close to 0, updates are small, and learning is slow.
+          Conversely, at an $$\alpha$$ close to 1, updates are considerable, and learning is fast; however, it may lead to the overshooting of the true values.
+          Typically, $$\alpha$$ is chosen as a small positive number for stability and gradual learning.
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Click "Train" button to train a MC agent.
+              Click "Test" button to observe the behavior of the trained agent.
+              Click "Reset" button to reset the value table.
+            </div>
+
+            <div id="play_mc" class="play_div">
+              <div class="board"></div>
+              <br>
+
+              <a class="btn_train" style="display: inline-block; margin: auto"><img src="img/buttons/train.png" alt="train"/></a>
+              <a class="btn_stop" style="display: none; margin: auto"><img src="img/buttons/stop.png" alt="stop"/></a>
+              <a class="btn_test" style="display: inline-block; margin: auto"><img src="img/buttons/test.png" alt="test"/></a>
+              <a class="btn_reset" style="display: inline-block; margin: auto"><img src="img/buttons/reset2.png" alt="reset"/></a>
+
+              <img class="n_episode" src="img/buttons/episode.png" alt="episode"/>
+              <p class="n_episode n_episode_text" style="display: inline-block">0</p>
+            </div>
+
+            <div class="caption"><b>Figure 11:</b><br>
+              MC learning process.
+              The left figure shows the agent and environment, while the right figure displays the state value table.
+            </div>
+
+            <script type="module" src="rlboard/play_mcagent.js"></script>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Drag and zoom to change the view of the 3D value table.
+            </div>
+
+            <div id="play_mc_3d_table">
+            </div>
+
+
+            <div class="caption"><b>Figure 12:</b><br>
+              3D value table of the MC agent.
+            </div>
+
+            <script type="module" src="rlboard/3D_table.js"></script>
+          </div>
+        </div>
+
+        <p>
+          The MC approach has a few disadvantages.
+          One is that it requires complete episodes of an interaction with the environment before it can update the state values.
+          This can be time-consuming and computationally expensive, especially for problems with long or infinite episodes.
+          The MC method can also suffer from a high variance in the value estimates, particularly when the episodes are short or few.
+          This variance can make it difficult for the agent to learn the true state values and lead to a slower convergence.
+          The TD approach addresses the abovementioned issues, making value learning more stable and efficient.
+        </p>
+
+      </section>
+
+      <section id="temporal_difference">
+        <h2>IV. Temporal Difference learning</h2>
+
+        <p>
+          The TD approach is another method for estimating the value function in RL.
+          Unlike the MC method that requires waiting until the end of an episode to update the value function, the TD method updates the value function at every transition.
+          The MC method requires the complete return of an episode to update the value function; however, this return is not known until the end of that episode.
+          Using the TD method avoids the waiting time because it updates the value function before the end of an episode.
+        </p>
+
+        <p class="inline-math">
+          The TD method achieves its goal using the bootstrap method that uses its own value estimates to update the value function.
+          The TD approach specifically updates the current value function $$V(s_t)$$ with a more accurate estimate $$R_{t+1} + \gamma V(s_{t+1})$$ and considers the sampled reward received by the agent,
+          thereby allowing it to incrementally update the value function estimate in real time without needing to wait for the end of an episode.
+        </p>
+
+        <p>
+          \[V\left(s_t\right)=\mathbb{E}\left[R_{t+1}+\gamma V\left(s_{t+1}\right)\right]\]
+        </p>
+
+        <p class="inline-math">
+          Similar to the MC method, the TD method also uses a step-size parameter ($$\alpha$$) to guide the learning process.
+        </p>
+
+        <p>
+          The TD update equation is presented as
+        </p>
+
+        <p>
+          \[V_{new}(s_t) = V(s_t) + \alpha (R_{t+1} + \gamma V(s_{t+1}) - V(s_t))\]
+        </p>
+
+        <p>
+          This equation highlights the essence of TD learning, that is, to adjust the estimated state value based on the observed reward and the estimated value of the next state.
+          Both of which are immediately available after a transition.
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              <p class="inline-math">
+                Set current state value, next state value, reward, and step-size parameter in the interactive formula below, and observe how the new value is calculated.
+              </p>
+            </div>
+
+            <div id="td_update_calculation" class="update_calculation">
+              <p>$$V(s_t) = $$</p>
+              <input id="td-V" value="1" type="number" style="margin-right: 30px;"/>
+              <p>$$\gamma = $$</p>
+              <span style="position: relative; top: 10px; left: 5px; font-size: 14px">0</span>
+              <input id="td-gamma" value="90" min="0" max="100" type="range" style="position: relative; left: -10px"/>
+              <span style="position: relative; top: 11px; left: -26px; font-size: 14px">1</span>
+              <span><br></span>
+              <p>$$V(s_{t+1}) = $$</p>
+              <input id="td-V-next" value="2" type="number" min="0"/>
+              <span><br></span>
+              <p>$$R_{t+1} = $$</p>
+              <input id="td-R" value="3" type="number" min="0"/>
+              <span><br></span>
+              <p>$$\alpha = $$</p>
+              <input id="td-alpha" value="0.1" type="number" min="0"/>
+              <span><br></span>
+              <p id="td-V-new-calc" style="position: relative; top: -10px; left: -5px"></p>
+            </div>
+
+            <div class="caption"><b>Figure 13:</b><br>
+              Computation of new values in TD update process.
+            </div>
+
+            <script type="module" src="rlboard/calculate_td_update.js"></script>
+          </div>
+        </div>
+
+        <p>
+          Compared to the MC method, the TD method is more computationally efficient because of its frequent update.
+          However, it also possesses bias and may not converge to the true value function because it uses an estimated function $$V(s)$$ for the update instead of a true value function.
+          Despite these limitations, the TD method demonstrates practical effectiveness in various real-world applications and is being successfully applied to various RL problems.
+          The TD method generally converges faster than the MC method. However, this was not the case for the examples presented in this paper due to the random training policy.
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Click "Train" button to train a TD agent. Click "Step" button to train only one step. Click "Test" button to observe the behavior of the trained agent. Click "Reset" button to reset the value table.
+            </div>
+
+            <div id="play_td" class="play_div">
+              <div class="board"></div>
+              <br>
+
+              <a class="btn_step" style="display: inline-block"><img src="img/buttons/step.png" alt="step"/></a>
+              <a class="btn_train" style="display: inline-block"><img src="img/buttons/train.png" alt="train"/></a>
+              <a class="btn_stop" style="display: none"><img src="img/buttons/stop.png" alt="stop"/></a>
+              <a class="btn_test" style="display: inline-block"><img src="img/buttons/test.png" alt="test"/></a>
+              <a class="btn_reset" style="display: inline-block"><img src="img/buttons/reset2.png" alt="reset"/></a>
+
+              <img class="n_episode" style="margin-left: 88px" src="img/buttons/episode.png" alt="episode"/>
+              <p class="n_episode n_episode_text" style="display: inline-block; margin-left: 118px">0</p>
+            </div>
+
+            <div class="caption"><b>Figure 14:</b><br>
+              TD learning process.
+              The left figure shows the agent and environment, while the right figure displays the state value table.
+            </div>
+
+            <script type="module" src="rlboard/play_tdagent.js"></script>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Drag and zoom to change the view of the 3D value table.
+            </div>
+
+            <div id="play_td_3d_table">
+            </div>
+
+            <div class="caption"><b>Figure 15:</b><br>
+              3D value table of the TD agent.
+            </div>
+
+            <script type="module" src="rlboard/3D_table.js"></script>
+          </div>
+        </div>
+
+      </section>
+
+      <section id="difference">
+        <h2>V. Difference between MC and TD</h2>
+
+        <p>
+          Both the MC and TD approaches are used in RL to estimate the value function, differing only in the way they update this function.
+          The MC method estimates values by averaging the sample returns obtained from multiple episodes,
+          while the TD method uses the Bellman equation to compute the target values from the estimated values.
+          In other words, the MC method can update the values only at the end of each episode, while the TD method can update the values after each time step.
+          The TD approach has an inherent capability to swiftly pinpoint meaningful interactions because of its incremental update scheme.
+          This scheme enables the ongoing episode to be directly influenced by the changes resulting from the previous interactions.
+          This mechanism contributes to a faster convergence that enhances the overall efficiency of the TD method as compared to the MC approach.
+          In summary, the MC method is more computationally expensive and time consuming, while the TD method is more efficient and takes faster to converge.
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Click "Train" button to train MC and TD agents.
+              Click "Test" button to observe the behavior of the trained agent.
+              Click "Reset" button to reset the value table.
+            </div>
+
+            <div id="play_mc_vs_td" class="play_div">
+              <div class="board" style="margin-left: 4px"></div>
+              <div class="board"></div>
+              <br>
+              <br>
+
+              <a class="btn_train" style="display: inline-block; margin: auto"><img src="img/buttons/train.png" alt="train"/></a>
+              <a class="btn_stop" style="display: none; margin: auto"><img src="img/buttons/stop.png" alt="stop"/></a>
+              <a class="btn_test" style="display: inline-block; margin: auto"><img src="img/buttons/test.png" alt="test"/></a>
+              <a class="btn_reset" style="display: inline-block; margin: auto"><img src="img/buttons/reset2.png" alt="reset"/></a>
+
+              <img class="n_episode" src="img/buttons/episode.png" alt="episode"/>
+              <p class="n_episode n_episode_text" style="display: inline-block">0</p>
+            </div>
+
+            <div class="caption"><b>Figure 16:</b><br>
+              Comparison of MC and TD learning.
+              The left figure is MC and the right figure is TD.
+            </div>
+
+            <script type="module" src="rlboard/play_mc_vs_td.js"></script>
+          </div>
+        </div>
+
+        <br>
+
+        <p>
+          While the MC and TD methods estimate values differently, both asymptotically converge to the true values.
+          The optimal agent’s behavior is depicted in the figure below.
+          The true values were obtained by considering all the possible future states and actions using an environment model.
+          The optimal agent selects the best action based on these values, thereby resulting in the highest possible reward.
+          While the optimal agent considers all the possibilities, the MC and TD agents only consider a subset of possible future states and actions.
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Click 'Test' to observe the agent's behavior based on true values from the random agent.
+            </div>
+
+            <div id="play_optim" class="play_div">
+              <div class="board"></div>
+              <br>
+
+              <a class="btn_test" style="display: inline-block; margin: auto"><img src="img/buttons/test.png" alt="test"/></a>
+              <a class="btn_stop" style="display: none; margin: auto"><img src="img/buttons/stop.png" alt="stop"/></a>
+            </div>
+
+            <div class="caption"><b>Figure 17:</b><br>
+              True values of the states.
+              The left figure shows the agent and the environment and the right figure shows the true value table.
+            </div>
+
+            <script type="module" src="rlboard/play_optim.js"></script>
+          </div>
+        </div>
+
+        <p>
+          The bias and the variance of these two algorithms can be considered from a machine learning perspective.
+          MC learning has a low bias, but a high variance because it estimates the value function by averaging the returns from multiple episodes, which can lead to a high variance.
+          However, the value function is updated only with the sample returns; thus, the estimation introduces no bias.
+          By contrast, TD learning has a low variance, but a high bias because it updates the value function at each time step based on the estimated target values,
+          this leads to a lower variance because each update is based on a single time step.
+          It can, however, introduce a bias because the value function is updated with the estimated target values.
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Click "Train" button to start MC and TD training.
+              Click "Reset" button to clear all results.
+            </div>
+
+            <div id="play_rmse" class="play_div">
+              <div id="chart"></div>
+
+              <a class="btn_train" style="display: inline-block; margin: auto"><img src="img/buttons/train.png" alt="train"/></a>
+              <a class="btn_stop" style="display: none; margin: auto"><img src="img/buttons/stop.png" alt="stop"/></a>
+              <a class="btn_reset" style="display: inline-block; margin: auto"><img src="img/buttons/reset2.png" alt="reset"/></a>
+            </div>
+
+            <div class="caption"><b>Figure 18:</b><br>
+              Comparison of RMSE(Root Mean Squared Error) of MC and TD agents.
+              X axis is number of episodes and Y axis is RMSE.
+            </div>
+
+            <script type="module" src="rlboard/play_rmse.js"></script>
+          </div>
+        </div>
+
+        <p>
+          In practice, the choice between the MC and TD methods depends on a specific problem and available resources.
+          Understanding the differences between both approaches enables researchers and practitioners to choose the most appropriate approach for a particular application.
+        </p>
+
+
+        <p>
+          Table I summarizes the differences between the MC and TD methods.
+        </p>
+
+        <div class="formula-wrapper">
+          <table class="formula" style="margin: auto auto">
+            <tbody><tr>
+              <th style="width: 150px">Aspect</th>
+              <th style="width: 250px; text-align: center">MC</th>
+              <th style="width: 250px; text-align: center">TD</th>
+              </th>
+            </tr>
+            <tr>
+              <td>Update Timing</td>
+              <td style="text-align:center">Episodic</td>
+              <td style="text-align:center">Online</td>
+            </tr>
+            <tr>
+              <td>Learning from Partial Data</td>
+              <td style="text-align:center">No (Requires complete episodes)</td>
+              <td style="text-align:center">Yes (Can learn from incomplete episodes)</td>
+            </tr>
+            <tr>
+              <td>Bootstrapping</td>
+              <td style="text-align:center">No (No bootstrapping)</td>
+              <td style="text-align:center">Yes (Uses bootstrapping)</td>
+            </tr>
+            <tr>
+              <td>Bias</td>
+              <td style="text-align:center">Unbiased</td>
+              <td style="text-align:center">Biased (due to bootstrapping)</td>
+            </tr>
+            <tr>
+              <td>Variance</td>
+              <td style="text-align:center">High</td>
+              <td style="text-align:center">Lower (due to bootstrapping)</td>
+            </tr>
+            <tr>
+              <td>Convergence</td>
+              <td style="text-align:center">Slower</td>
+              <td style="text-align:center">Faster</td>
+            </tr>
+            <tr>
+              <td>Computation</td>
+              <td style="text-align:center">More computationally expensive</td>
+              <td style="text-align:center">Less computationally expensive</td>
+            </tr>
+          </tbody></table>
+          <div class="caption">
+            <b>Table 1:</b> Comparison of MC and TD in various aspects.
+          </div>
+          <br>
+        </div>
+
+      </section>
+
+      <section id="n_step_TD">
+        <h2>VI. n-step TD</h2>
+
+        <p>
+          The previous sections introduced the MC and TD methods, which are two principal methods for estimating the value function.
+          Each method has distinct advantages and disadvantages.
+          For instance, the TD method excels in computational efficiency, but introduces a bias in its estimates.
+          On the contrary, the MC method provides unbiased estimates, but at the cost of a high variance.
+        </p>
+
+        <p>
+          This difference between both methods raises the following thought-provoking question: Can the strengths of these methods be synthesized while their weaknesses are mitigated?
+          Can we seek a compromise, that is, a “best-of-both-worlds” approach that could effectively balance the bias–variance trade-off?
+          This idea triggers the exploration of a hybrid strategy that could seamlessly integrate the TD method’s efficiency and the MC method’s unbiased nature.
+          Let us try to understand this by delving deeper into how the MC and TD methods perform their computations.
+          The MC method approximates the sample returns as follows by employing the full trajectory of an episode:
+        </p>
+
+        <p>
+          \[G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \dots + \gamma^{T-t-1} R_{T}\]
+        </p>
+
+        <p class="inline-math">
+          where, $$T$$ represents an episode length.
+        </p>
+
+        <p>
+          By contrast, the TD method leverages only a single information step for the value updates:
+        </p>
+
+        <p>
+          \[G_t = R_{t+1} + \gamma V(S_{t+1})\]
+        </p>
+
+        <p>
+          Therefore, when crafting a combined methodology, a model that uses multiple steps for value updates, but not necessarily the entire trajectory, could be designed.
+          The three-step return could be used as a target for the TD update.
+        </p>
+
+        <p>
+          \[G_{t:t+3} = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \gamma^3 V(S_{t+3})\]
+        </p>
+
+        <p class="inline-math">
+          In this case, $$\gamma^3 V(S_{t+3})$$ is used as a proxy for $$\gamma^{3} R_{t+4} + \dots + \gamma^{T-t-1} R_{T}$$.
+          The concept of N-step TD [<a href="#ref_8">9</a>][<a href="#ref_9">10</a>] learning is used here, offering a promising balance between bias and variance and ultimately improving the learning efficiency in RL scenarios.
+          Generalizing this yields the following n-step return for arbitrary n:
+        </p>
+
+        <p>
+          \[G_{t:t+n} = R_{t+1} + \gamma R_{t+2} + \dots + \gamma^{n-1} R_{t+n} + \gamma^n V(S_{t+n})\]
+        </p>
+
+        <p>
+          The N-step TD update equation is as follows:
+        </p>
+
+        <p>
+          \[V_{new}(s_t) = V(s_t) + \alpha (G_{t:t+n} - V(s_t))\]
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Click "Train" button to train a N-step TD agent.
+              Click "Step" button to train only one step.
+              Click "Test" button to observe the behavior of the trained agent.
+              Click "Reset" button to reset the value table.
+              Choose N using the drop-down menu.
+            </div>
+
+            <div id="play_nstep_td" class="play_div">
+              <div class="board"></div>
+              <br>
+
+              <a class="btn_step" style="display: inline-block"><img src="img/buttons/step.png" alt="step"/></a>
+              <a class="btn_train" style="display: inline-block"><img src="img/buttons/train.png" alt="train"/></a>
+              <a class="btn_stop" style="display: none"><img src="img/buttons/stop.png" alt="stop"/></a>
+              <a class="btn_test" style="display: inline-block"><img src="img/buttons/test.png" alt="test"/></a>
+              <a class="btn_reset" style="display: inline-block"><img src="img/buttons/reset2.png" alt="reset"/></a>
+
+              <img src="img/buttons/N.png" alt="n" style="-webkit-user-drag: none; height: 23px; margin-left: 10px"/>
+              <label>
+                <select id="select_n" name="n_step">
+                  <option value=1 selected>1</option>
+                  <option value=5>5</option>
+                  <option value=10>10</option>
+                  <option value=15>15</option>
+                </select>
+              </label>
+
+              <img class="n_episode" style="margin-left: 54px" src="img/buttons/episode.png" alt="episode"/>
+              <p class="n_episode n_episode_text" style="display: inline-block; margin-left: 84px">0</p>
+            </div>
+
+            <div class="caption"><b>Figure 19:</b><br>
+              N-step TD learning process.
+              The left figure shows the agent and environment, while the right figure displays the state value table.
+            </div>
+
+            <script type="module" src="rlboard/play_nstep_tdagent.js"></script>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Drag and zoom to change the view of the 3D value table.
+            </div>
+
+            <div id="play_nstep_td_3d_table">
+            </div>
+
+            <div class="caption"><b>Figure 20:</b><br>
+              3D value table of the N-step TD agent.
+            </div>
+
+            <script type="module" src="rlboard/3D_table.js"></script>
+          </div>
+        </div>
+
+        <p>
+          The RMSE of the MC, TD, and N-step TD agents can be examined with reference to the figure below.
+          The observed data showed that the performance of the N-step TD method was nestled between that of the MC and TD methods.
+          In other words, the N-step TD method proficiently bridged the gap between the MC and TD methods, achieving a more effective balance between variance and bias.
+          It successfully combined the advantages of both methodologies, serving as a compelling compromise for mitigating the disadvantages of each method.
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Click "Train" button to start MC and TD training.
+              Click "Reset" button to clear all results.
+            </div>
+
+            <div id="play_rmse2" class="play_div">
+              <div id="chart2"></div>
+
+              <a class="btn_train" style="display: inline-block; margin: auto"><img src="img/buttons/train.png" alt="train"/></a>
+              <a class="btn_stop" style="display: none; margin: auto"><img src="img/buttons/stop.png" alt="stop"/></a>
+              <a class="btn_reset" style="display: inline-block; margin: auto"><img src="img/buttons/reset2.png" alt="reset"/></a>
+            </div>
+
+            <div class="caption"><b>Figure 21:</b><br>
+              Comparison of RMSE(Root Mean Squared Error) of MC, TD, and N-step TD agents.
+              X-axis is number of episodes and Y axis is RMSE.
+            </div>
+
+            <script type="module" src="rlboard/play_rmse2.js"></script>
+          </div>
+        </div>
+
+        <p>
+          Optimal behavior can vary depending on the MDP. In the figure below, you can create your own MDP and check how optimal, MC, TD, and N-step TD agents behave.
+          The value table for the optimal agent is calculated based on optimal policy.
+        </p>
+
+        <div class="framed">
+          <div class="inside">
+            <div class="eyebrow">
+              Create your own MDP by dragging elements on the right into the game scene.
+              To test various agents on the MDP, click "save" button and select an algorithm using drop-down menu.
+              Click "Train" button to train an agent.
+              Click "Test" button to observe the behavior of the agent.
+            </div>
+
+            <div id="play_draganddrop" class="play_div">
+              <div class="board"></div>
+              <div style="display: inline-block; position: relative; margin-bottom: -95px; top: -105px">
+                <div class="place_creator"></div>
+                <div class="trash_can" style="margin-top: 10px"></div>
+              </div>
+              <div class="board" id="hiddenBoard1" style="display: none"></div>
+              <div class="board" id="hiddenBoard2" style="display: none"></div>
+              <div class="board" id="hiddenBoard3" style="display: none"></div>
+              <div class="board" id="hiddenBoard4" style="display: none"></div>
+              <br>
+
+              <a class="btn_save" style="display: inline-block; margin: auto; position: relative; top: -6px"><img src="img/buttons/save.png" alt="save"/></a>
+
+              <div id="play_my_mdp" style="display: none">
+                <a class="btn_back" style="display: inline-block; margin: auto"><img src="img/buttons/back.png" alt="back"/></a>
+                <label>
+                  <select id="select_agent" name="lang">
+                    <option value=Optimal>Optimal</option>
+                    <option value=MC selected>MC</option>
+                    <option value=TD>TD</option>
+                    <option value=N_STEP_TD>N-step TD</option>
+                  </select>
+                </label>
+                <a class="btn_train" style="display: inline-block; margin: auto"><img src="img/buttons/train.png" alt="train"/></a>
+                <a class="btn_stop" style="display: none; margin: auto"><img src="img/buttons/stop.png" alt="stop"/></a>
+                <a class="btn_test" style="display: inline-block; margin: auto"><img src="img/buttons/test.png" alt="test"/></a>
+
+                <a class="select_n_step_drop_down" style="display: none; margin: auto">
+                  <img src="img/buttons/N.png" alt="n" style="-webkit-user-drag: none; height: 23px; margin-left: 10px"/>
+                  <label>
+                    <select id="select_n_step" name="lang">
+                      <option value=1 selected>1</option>
+                      <option value=5>5</option>
+                      <option value=10>10</option>
+                      <option value=15>15</option>
+                    </select>
+                  </label>
+                </a>
+
+                <img class="n_episode" src="img/buttons/episode.png" alt="episode" style="margin-left: 83px"/>
+                <p class="n_episode n_episode_text" style="display: inline-block; margin-left: 111px">0</p>
+              </div>
+
+            </div>
+
+            <div class="caption"><b>Figure 22:</b><br>
+              Example of an MDP.
+            </div>
+
+            <script type="module" src="rlboard/play_draganddrop.js"></script>
+          </div>
+        </div>
+
+      </section>
+
+      <section id="conclusion">
+        <h2>VII. Conclusion</h2>
+
+        <p>
+          This paper presented overviews of the two common approaches in RL: the MC and TD methods.
+          While these methods have their respective advantages and disadvantages, note that RL encompasses many other approaches beyond these two.
+          For example, model-based [<a href="#ref_5">6</a>] and policy gradient methods [<a href="#ref_6">7</a>] are also commonly used in RL, which may better suit certain problems or have particular advantages in different contexts.
+        </p>
+
+        <p>
+          The recent advancements in RL have demonstrated the potential of combining RL with deep learning to achieve even better results [<a href="#ref_7">8</a>].
+          From game playing and robotics to natural language processing and recommendation systems, these hybrid approaches have shown great promise in various applications.
+          More innovations and breakthroughs in RL will likely emerge with its continuous evolution. Witnessing how these new approaches and techniques can be applied to real-world challenges will be exciting.
+        </p>
+
+      </section>
+
+      <section class="references">
+        <h2>References</h2>
+        <ol>
+          <li id="ref_0">
+            Reinforcement learning: An introduction
+            <span>
+              Sutton, R. S., & Barto, A. G. 2018. MIT press.
+            </span>
+          </li>
+
+          <li id="ref_1">
+            Mastering the game of go without human knowledge
+            <span>
+              Silver, David, et al. 2017. Nature 550.7676: 354-359.
+              DOI:<a href="https://doi.org/10.1038/nature24270" target="_blank">10.1038/nature24270</a>
+            </span>
+          </li>
+
+          <li id="ref_2">
+            Grandmaster level in StarCraft II using multi-agent reinforcement learning
+            <span>
+              Vinyals, Oriol, et al. 2019. Nature 575.7782: 350-354.
+              DOI:<a href="https://doi.org/10.1038/s41586-019-1724-z" target="_blank">10.1038/s41586-019-1724-z</a>
+            </span>
+          </li>
+
+          <li id="ref_3">
+            Highly accurate protein structure prediction with AlphaFold
+            <span>
+              Jumper, John, et al. 2021. Nature 596.7873: 583-589.
+              DOI:<a href="https://doi.org/10.1038/s41586-021-03819-2" target="_blank">10.1038/s41586-021-03819-2</a>
+            </span>
+          </li>
+
+          <li id="ref_4">
+            RL from Basics
+            <span>
+              S. Rho, Badak Buteo Baeunenun Ganghwa Hakseup [RL from Basics] (in Korean). Seoul, South Korea: Youngjin.com, pp. 32-36, 2020.
+            </span>
+          </li>
+
+          <li id="ref_5">
+            Model-based reinforcement learning: A survey
+            <span>
+              Moerland, T. M., Broekens, J., Plaat, A., & Jonker, C. M. 2023. Foundations and Trends in Machine Learning, 16(1), 1-118.
+              DOI:<a href="http://dx.doi.org/10.1561/2200000086" target="_blank">10.1561/2200000086</a>
+            </span>
+          </li>
+
+          <li id="ref_6">
+            A natural policy gradient
+            <span>
+              Kakade, S. M. 2001. Advances in neural information processing systems, 14.
+            </span>
+          </li>
+
+          <li id="ref_7">
+            Human-level control through deep reinforcement learning
+            <span>
+              Mnih, Volodymyr, et al. 2015.Nature 518.7540: 529-533.
+              DOI:<a href="https://doi.org/10.1038/nature14236" target="_blank">10.1038/nature14236</a>
+            </span>
+          </li>
+
+          <li id="ref_8">
+            TD models: Modeling the world at a mixture of time scales
+            <span>
+              Sutton, Richard S. 1995.Machine Learning Proceedings 531-539.
+              DOI:<a href="https://doi.org/10.1016/B978-1-55860-377-6.50072-4" target="_blank">10.1016/B978-1-55860-377-6.50072-4</a>
+            </span>
+          </li>
+
+          <li id="ref_9">
+            Td (λ) networks: temporal-difference networks with eligibility traces
+            <span>
+              Tanner, Brian, and Richard S. Sutton. 2005.Proceedings of the 22nd international conference on Machine learning.
+              DOI:<a href="https://doi.org/10.1145/1102351.1102463" target="_blank">10.1145/1102351.1102463</a>
+            </span>
+          </li>
+
+          <li id="ref_10">
+            Markov decision processes
+            <span>
+              Puterman, Martin L. 1990.Handbooks in operations research and management science 2 : 331-434.
+              DOI:<a href="https://doi.org/10.1016/S0927-0507(05)80172-0" target="_blank">10.1016/S0927-0507(05)80172-0</a>
+            </span>
+          </li>
+
+        </ol>
+      </section>
+    </div>
+
+  </article><!-- End of article -->
+
+  <!-- Scroll to top button -->
+  <a class="scroll-top" href="#">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 312.36">
+      <path fill="white"
+        d="M0 276.77 253.12 0 512 282.48l-32.65 29.88-226.2-246.83L32.66 306.64z" />
+    </svg>
+  </a>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      let scrollTopBtn = document.querySelector(".scroll-top");
+      window.onscroll = function () { scrollFunction(scrollTopBtn) };
+
+      function scrollFunction(el) {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+          el.style.display = "flex";
+        } else {
+          el.style.display = "none";
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

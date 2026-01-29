@@ -1,0 +1,263 @@
+body {
+    min-width: 1050px;
+  }
+
+.disabled > img {
+    opacity: 50%;
+}
+
+.btn_train > img {
+    -webkit-user-drag: none;
+    height: 23px;
+}
+
+.btn_step > img {
+    -webkit-user-drag: none;
+    height: 23px;
+}
+
+.btn_stop > img {
+    -webkit-user-drag: none;
+    height: 23px;
+}
+
+.btn_test > img {
+    -webkit-user-drag: none;
+    height: 23px;
+}
+
+.btn_reset > img {
+    -webkit-user-drag: none;
+    height: 23px;
+}
+
+.btn_save > img {
+    -webkit-user-drag: none;
+    height: 23px;
+}
+
+.btn_back > img {
+    -webkit-user-drag: none;
+    height: 23px;
+}
+
+.btn_run > img {
+    -webkit-user-drag: none;
+    height: 23px;
+}
+
+.btn_clear > img {
+    -webkit-user-drag: none;
+    height: 23px;
+}
+
+select {
+    position: relative;
+    top: -7px;
+}
+
+.btn_arrow {
+    display: inline-block;
+    margin: 0 50px;
+}
+
+.play_div {
+    text-align: center;
+    user-select: none;
+}
+
+.row {
+    height: 50px;
+}
+
+.cell {
+    float: left;
+    background-size: contain;
+    background-position-x: right;
+    height: 50px;
+    width: 50px;
+}
+
+.value {
+    vertical-align: middle;
+    line-height: 50px;
+    background-blend-mode: hard-light;
+}
+
+.player {
+    height: inherit;
+    width: inherit;
+    margin-left: -25px;
+    position: absolute;
+    z-index: 3;
+}
+
+.place {
+    height: 40px;
+    width: 40px;
+    margin-top: 5px;
+    margin-left: -20px;
+    position: absolute;
+    z-index: 1;
+}
+
+.arrow {
+    height: 40px;
+    width: 40px;
+    margin-top: 5px;
+    margin-left: -20px;
+    position: absolute;
+    z-index: 2;
+}
+
+.draggable {
+    cursor: move;
+}
+
+.cell.highlight {
+    border: 1px solid yellow;
+}
+
+.board {
+    display: inline-block;
+    margin: auto;
+}
+
+.place_creator {
+    background-image: url("../img/rlboard/place_creator.png");
+    background-size: contain;
+    display: block;
+    width: 78px;
+    height: 216px;
+    margin-left: 10px;
+    padding: 20px 0;
+    cursor: pointer;
+}
+
+.trash_can {
+    background-image: url("../img/rlboard/trash_can.png");
+    background-size: contain;
+    display: block;
+    width: 75px;
+    height: 75px;
+    margin-left: 10px;
+    padding: 20px 0;
+    cursor: pointer;
+}
+
+.place_creator > img {
+    position: relative;
+    margin: 8px;
+}
+
+.effect {
+    height: 60px;
+    width: 60px;
+    margin-top: -5px;
+    margin-left: -30px;
+    position: absolute;
+    z-index: 2;
+}
+
+.n_episode {
+    width: 100px;
+    height: 23px;
+    margin-left: 118px;
+    position: absolute;
+}
+
+.n_episode_text {
+    font-size: 14px;
+    margin-top: 2px;
+    margin-left: 146px;
+}
+
+.score {
+    width: 100px;
+    height: 23px;
+    margin-left: -85px;
+    position: absolute;
+}
+
+#score_text {
+    display: inline-block;
+    font-size: 14px;
+    width: 40px;
+    margin-left: -30px;
+    margin-top: 2px;
+    position: absolute;
+}
+
+.update_calculation {
+    width: 50%;
+    margin: auto;
+    text-align: left;
+    padding-left: 90px;
+}
+
+.update_calculation p {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+.update_calculation input {
+    width: 55px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    position: absolute;
+    height: 5px;
+    border-radius: 5px;
+    background: #dfb3f2;
+}
+
+.slider:disabled {
+    background: #ddd;
+}
+
+.slider_grid {
+    top: 156px;
+    left: 518px;
+    width: 238px;
+    rotate: -90deg;
+}
+
+.slider_gamma {
+    top: 305px;
+    left: 430px;
+    width: 170px;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #9400d3;
+    border-radius: 50%;
+}
+
+.slider:disabled::-webkit-slider-thumb {
+    background: #ddd;
+}
+
+.slider_grid_ticks {
+    background-image: url("../img/gamma_board/GridTicks.png");
+    background-size: cover;
+    position: absolute;
+    top: 0px;
+    left: 610px;
+    width: 50px;
+    height: 300px;
+}
+
+.slider_gamma_ticks {
+    background-image: url("../img/gamma_board/GammaTicks.png");
+    background-size: contain;
+    position: absolute;
+    top: 305px;
+    left: 363px;
+    width: 236px;
+    height: 50px;
+}
